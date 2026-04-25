@@ -1,74 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, Terminal } from 'lucide-react';
 
-const Navbar: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
+const navItems = [
+  { label: '// HOME', href: '#home' },
+  { label: '// EXPERTISE', href: '#stack' },
+  { label: '// EXPERIENCE', href: '#experience' },
+  { label: '// PROJECTS', href: '#projects' },
+  { label: '// CP_VAULT', href: '#cp' },
+  { label: '// INITIATE', href: '#contact' },
+];
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const links = [
-    { label: 'Hero', href: '#hero' },
-    { label: 'Tech Stack', href: '#skills' },
-    { label: 'Services', href: '#services' },
-    { label: 'Work', href: '#projects' },
-    { label: 'CP Stats', href: '#cp' },
-    { label: 'Contact', href: '#contact' },
-  ];
+    
+    // Lock body scroll when mobile menu is open
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'glass border-b border-surface-bright' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-        <div className="font-display font-bold text-2xl tracking-tighter text-on-surface z-50 relative">
-          YA<span className="text-primary animate-pulse">.</span>
-        </div>
-        
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 font-mono ${isScrolled || isOpen ? 'bg-background/90 backdrop-blur-lg border-b border-surface-bright py-4 shadow-lg' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative z-50">
+        <a href="#home" className="group flex items-center gap-2 text-on-surface font-bold text-xl uppercase tracking-widest">
+          <Terminal size={24} className="text-secondary group-hover:text-primary transition-colors" />
+          <span className="group-hover:text-glow transition-all">YA.</span>
+        </a>
+
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 text-xs font-mono tracking-[0.1em] uppercase">
-          {links.map((link) => (
-            <a key={link.label} href={link.href} className="text-on-surface-variant hover:text-primary transition-colors hover:border-b hover:border-primary pb-1">
-              {link.label}
+        <div className="hidden md:flex gap-8">
+          {navItems.map((item) => (
+            <a 
+              key={item.href} 
+              href={item.href}
+              className="text-sm text-on-surface-variant hover:text-secondary uppercase tracking-widest transition-all duration-300 hover:scale-105"
+            >
+              {item.label}
             </a>
           ))}
         </div>
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden z-50 relative text-on-surface hover:text-primary transition-colors"
+          className="md:hidden text-on-surface p-2 focus:outline-none z-50 relative"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? <X size={32} /> : <Menu size={32} />}
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: '-100%' }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '-100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 border-b border-surface-bright"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-[72px] left-0 w-full h-[calc(100vh-72px)] bg-background/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 shadow-2xl z-40 overflow-y-auto"
+            onClick={() => setIsOpen(false)} // Clicking outside closes the menu
           >
-            {links.map((link, i) => (
+            {navItems.map((item, i) => (
               <motion.a 
-                key={link.label}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 + 0.2 }}
-                className="font-display text-4xl text-on-surface hover:text-primary transition-colors uppercase font-bold"
+                key={item.href} 
+                href={item.href}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="text-xl text-on-surface font-bold uppercase tracking-widest hover:text-secondary transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsOpen(false);
+                }}
               >
-                {link.label}
+                {item.label}
               </motion.a>
             ))}
           </motion.div>

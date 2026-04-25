@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub as Github } from 'react-icons/fa';
+import imgSeg from '../assets/images/Image-Segmentation.png';
+import miniW from '../assets/images/Mini-Wasalny.png';
+import watchIt from '../assets/images/Watch-it.png';
 
 const projectsData = [
   {
@@ -9,7 +12,7 @@ const projectsData = [
     tags: ["Algorithms", "C++", "Graphs/MST"],
     description: "Implemented graph-based segmentation using disjoint set union (union-find) and Kruskal's MST for region merging with 8-connected neighborhoods. Optimized edge processing with a counting sort algorithm for O(n) edge weight sorting.",
     github: "https://github.com/David-Magdy/Image-Segmentation",
-    img: "/Image-Segmentation2.png"
+    img: imgSeg
   },
   {
     title: "Mini-Wasalny",
@@ -17,7 +20,7 @@ const projectsData = [
     tags: ["Qt", "C++", "Visualization"],
     description: "Built a Qt desktop application for visualizing graph algorithms (DFS, BFS, Dijkstra, Floyd-Warshall). Implemented interactive graph manipulation with node dragging and real-time color highlighting.",
     github: "https://github.com/Peter-Refaat/Mini-Wasalny",
-    img: "/Mini-Wasalny.png"
+    img: miniW
   },
   {
     title: "Watch-It",
@@ -25,7 +28,7 @@ const projectsData = [
     tags: ["Java", "JavaFX", "Dynamic Programming"],
     description: "Developed a full-stack Java application simulating streaming platform functionality. Implemented a search system using dynamic programming for efficient lookup and designed a responsive dashboard.",
     github: "https://github.com/youssab-osama/Watch_IT",
-    img: "/Watch-it.png"
+    img: watchIt
   }
 ];
 

@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Projects from './components/Projects';
 import CompetitiveProgramming from './components/CompetitiveProgramming';
 import TechStack from './components/TechStack';
+import Experience from './components/Experience';
 import Services from './components/Services';
 import Contact from './components/Contact';
 
@@ -15,6 +16,7 @@ function App() {
         <Hero />
         <div className="h-16 md:h-24" />{/* Safe gap */}
         <TechStack />
+        <Experience />
         <div className="h-16 md:h-24" />
         <Services />
         <Projects />

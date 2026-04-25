@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Trophy, Code, Target, Award, ExternalLink } from 'lucide-react';
+import backgImg from '../assets/images/backg.jpg';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -43,7 +44,7 @@ const CompetitiveProgramming: React.FC = () => {
       {/* Background Image with Theme Filters */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-fixed bg-no-repeat"
-        style={{ backgroundImage: "url('/backg.jpg')", filter: 'grayscale(70%) contrast(120%) brightness(30%)' }}
+        style={{ backgroundImage: `url(${backgImg})`, filter: 'grayscale(70%) contrast(120%) brightness(30%)' }}
       />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background via-background/50 to-background" />
 

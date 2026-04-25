@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { ArrowDown, Code2, Terminal, Cpu } from 'lucide-react';
+import profileImage from '../assets/images/profile 2.jpg';
 
-const LiveGraph: React.FC = () => {
+const LiveGraph = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -10,58 +12,57 @@ const LiveGraph: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let particles: {x: number, y: number, vx: number, vy: number}[] = [];
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      particles = [];
-      const particleCount = window.innerWidth < 768 ? 40 : 80;
-      for(let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-        });
-      }
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     };
-    resize();
     window.addEventListener('resize', resize);
 
-    let animationFrameId: number;
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#4ade80'; 
-      ctx.strokeStyle = '#4ade80';
-      
-      for(let i=0; i<particles.length; i++) {
-        const p = particles[i];
+    const particles: { x: number; y: number; vx: number; vy: number }[] = [];
+    for (let i = 0; i < 50; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+      });
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(6, 182, 212, 0.4)';
+      ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
+      ctx.lineWidth = 1;
+
+      particles.forEach((p, i) => {
         p.x += p.vx;
         p.y += p.vy;
-        if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        
-        ctx.globalAlpha = 0.5;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
         ctx.fill();
 
-        for(let j=i+1; j<particles.length; j++) {
+        for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
           if (dist < 150) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.globalAlpha = (1 - dist / 150) * 0.3;
             ctx.stroke();
-            ctx.globalAlpha = 1;
           }
         }
-      }
-      animationFrameId = requestAnimationFrame(render);
+      });
+      animationFrameId = requestAnimationFrame(draw);
     };
-    render();
+    draw();
 
     return () => {
       window.removeEventListener('resize', resize);
@@ -69,87 +70,120 @@ const LiveGraph: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0 opacity-40 pointer-events-none" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none opacity-30" />;
 };
 
-const Hero: React.FC = () => {
+const Hero = () => {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <section id="home" className="relative min-h-[100svh] w-full flex items-center justify-center overflow-hidden bg-background pt-20">
       <LiveGraph />
-      <div className="z-10 max-w-7xl w-full px-6 flex flex-col-reverse lg:flex-row items-center gap-12 relative pt-12 md:pt-0">
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(0,0,0,0)_0%,rgba(0,0,0,0.8)_100%)] pointer-events-none z-0" />
+
+      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        
+        {/* Left Content */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, type: 'spring', bounce: 0.4 }}
-          className="flex-1 text-center lg:text-left z-20"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="col-span-12 lg:col-span-8 flex flex-col justify-center order-2 lg:order-1"
         >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="font-mono text-primary text-xs md:text-sm uppercase tracking-[0.1em] mb-6 inline-block border border-primary/30 bg-primary/10 px-4 py-2 rounded-sm"
-          >
-            <span className="w-2 h-2 inline-block rounded-full bg-primary mr-3 animate-ping" />
-            System Online // Status: Expert
-          </motion.div>
-          <h1 className="font-display font-bold text-5xl sm:text-6xl md:text-7xl lg:text-[100px] leading-[1.0] tracking-[-0.04em] text-on-surface mb-8 uppercase">
-            <span className="text-surface-variant uppercase text-shadow-sm">SOFTWARE</span><br />
-            ENGINEER<span className="text-primary animate-pulse">_</span>
+          {/* Welcome the client */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="flex h-3 w-3 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+            </span>
+            <span className="font-mono text-secondary text-sm md:text-base uppercase tracking-[0.2em] font-bold">
+              Welcome, Client
+            </span>
+          </div>
+          
+          <h1 className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-[7rem] leading-[1.1] tracking-tighter text-on-surface mb-6 uppercase break-words hyphens-auto w-full">
+            Yousuf <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-on-surface to-on-surface-variant outline-text text-shadow-sm">Abdelhady</span>
           </h1>
-          <p className="font-sans text-lg md:text-xl text-on-surface-variant max-w-2xl mx-auto lg:mx-0 mb-12 leading-relaxed">
-            With a <span className="text-on-surface font-semibold glow-hover transition-colors text-glow text-primary/90">Sharp Problem-Solving Mindset</span>. 
-            Merging rigorous algorithmic efficiency with system-level engineering.
+
+          <p className="font-mono text-base md:text-lg text-primary uppercase tracking-[0.15em] mb-8 max-w-2xl border-l-2 border-primary pl-4 glow-hover transition-colors duration-300 shadow-sm">
+            Software Engineer / Systems Architect / Problem Solver
           </p>
-          <div className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6">
-            <a href="#contact" className="bg-primary text-on-primary px-8 py-4 font-mono text-sm tracking-widest uppercase font-bold hover:-translate-y-1 hover:-translate-x-1 hover:shadow-[6px_6px_0_#4ade80] active:translate-x-0 active:translate-y-0 active:shadow-none transition-all duration-200">
-              [ Init Contact ]
-            </a>
-            <a href="#projects" className="bg-transparent text-on-surface border border-surface-bright px-8 py-4 font-mono text-sm tracking-widest uppercase font-bold hover:bg-surface-container-highest hover:border-surface-variant hover:text-primary transition-all duration-200">
-              View Work
-            </a>
+
+          <p className="font-sans text-on-surface-variant text-lg md:text-xl max-w-2xl leading-relaxed mb-10">
+            I synthesize abstract logic into highly performant, scalable software architecture. Specializing in C++, dynamic algorithms, and full-stack ecosystems.
+          </p>
+
+          <div className="flex flex-wrap gap-6 items-center">
+            <motion.a 
+              href="#contact"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-on-surface text-background px-8 py-4 font-mono uppercase tracking-widest font-bold hover:bg-secondary hover:text-on-secondary transition-colors duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-secondary/50 rounded flex items-center gap-3"
+            >
+              <Terminal size={18} /> INITIATE_CONTACT
+            </motion.a>
+            <motion.a 
+              href="#projects"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="border border-surface-bright text-on-surface-variant px-8 py-4 font-mono uppercase tracking-widest hover:border-primary hover:text-primary transition-all duration-300 rounded flex items-center gap-3 bg-surface/30 backdrop-blur"
+            >
+              <Cpu size={18} /> VIEW_SYSTEMS
+            </motion.a>
           </div>
         </motion.div>
 
+        {/* Right Content / Image Area */}
         <motion.div 
-          className="flex-1 flex justify-center lg:justify-end relative z-10 w-full"
-          initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, type: 'spring', bounce: 0.5 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+          className="col-span-12 lg:col-span-4 flex justify-center lg:justify-end items-center relative order-1 lg:order-2"
         >
-          <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-[450px] lg:h-[450px] flex items-center justify-center">
-            {/* Pulsing glow background */}
-            <motion.div 
-              animate={{ scale: [1, 1.05, 1], opacity: [0.5, 0.8, 0.5] }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute inset-0 bg-primary/20 rounded-full blur-[60px]"
-            />
-            {/* Inner Ring */}
-            <motion.div 
-              animate={{ rotate: -360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 rounded-full border-2 border-dashed border-primary/30"
-            />
-            {/* Outer Ring */}
-            <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-[-30px] rounded-full border border-surface-bright"
-            />
-            
-            <div className="relative w-[90%] h-[90%] rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 border-primary border-glow rotate-3 bg-surface-container group">
-              <div className="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none mix-blend-overlay" />
-              <img 
-                src="/profile 2.jpg" 
-                alt="Yousuf Abdelhady" 
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter hover:contrast-125"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" fill="none"><rect width="100%" height="100%" fill="%231a1a1a" /><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%234ade80" font-family="monospace" font-size="10">USER_PROFILE_IMG</text></svg>';
-                }}
-              />
-            </div>
+          <div className="relative w-80 h-80 md:w-96 md:h-96 group mt-8 lg:mt-0">
+             {/* Spinning and scaling glow borders */}
+             <div className="absolute inset-[-10%] rounded-full border-t border-r border-primary/50 animate-[spin_10s_linear_infinite] group-hover:border-primary group-hover:scale-110 transition-all duration-700" />
+             <div className="absolute inset-[-20%] rounded-full border-b border-l border-secondary/30 animate-[spin_15s_linear_infinite_reverse] group-hover:border-secondary group-hover:scale-[1.15] transition-all duration-700" />
+             
+             {/* Heavy Blur backdrop */}
+             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full group-hover:bg-primary/40 transition-colors duration-700" />
+             
+             <div className="relative w-full h-full p-2 bg-surface border border-surface-highest rounded-[48px] overflow-hidden rotate-3 hover:rotate-0 hover:scale-[1.03] transition-all duration-500 shadow-2xl shadow-primary/10">
+               <img 
+                  src={profileImage} 
+                  alt="Yousuf Abdelhady Profile" 
+                  className="w-full h-full object-cover rounded-[40px] transition-all duration-700"
+               />
+               {/* Technical overlay grid */}
+               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9InRyYW5zcGFyZW50Ii8+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none group-hover:opacity-0 transition-opacity" />
+             </div>
+             
+             {/* Floating Badge */}
+             <motion.div 
+               animate={{ y: [0, -10, 0] }}
+               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+               className="absolute -bottom-6 -left-6 bg-surface-highest border border-surface-bright px-5 py-3.5 rounded-lg backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.15)] flex items-center gap-3 z-20"
+             >
+               <Code2 className="text-secondary" size={28} />
+               <div className="flex flex-col">
+                 <span className="font-mono text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Status</span>
+                 <span className="font-display text-sm md:text-base font-black text-[#06b6d4] drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">Job Ready</span>
+               </div>
+             </motion.div>
           </div>
         </motion.div>
+
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div 
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-on-surface-variant flex flex-col items-center gap-2 pointer-events-none opacity-50"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-widest">Scroll</span>
+        <ArrowDown size={16} />
+      </motion.div>
     </section>
   );
 };
