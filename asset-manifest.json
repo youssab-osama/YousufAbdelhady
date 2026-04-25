@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/YousufAbdelhady/static/css/main.ce8971a0.css",
+    "main.js": "/YousufAbdelhady/static/js/main.ecb2e68d.js",
+    "static/js/453.ababb8c1.chunk.js": "/YousufAbdelhady/static/js/453.ababb8c1.chunk.js",
+    "static/media/Mini-Wasalny.png": "/YousufAbdelhady/static/media/Mini-Wasalny.d8eaff2e1c1b27c74d77.png",
+    "static/media/Watch-it.png": "/YousufAbdelhady/static/media/Watch-it.015ec7dc06e749977e2e.png",
+    "static/media/backg.jpg": "/YousufAbdelhady/static/media/backg.4012d815d1a4d53803c3.jpg",
+    "static/media/Image-Segmentation.png": "/YousufAbdelhady/static/media/Image-Segmentation.59cab93bfc6ca9c86788.png",
+    "static/media/profile 2.jpg": "/YousufAbdelhady/static/media/profile 2.6f24546e09a86881e9e0.jpg",
+    "index.html": "/YousufAbdelhady/index.html",
+    "main.ce8971a0.css.map": "/YousufAbdelhady/static/css/main.ce8971a0.css.map",
+    "main.ecb2e68d.js.map": "/YousufAbdelhady/static/js/main.ecb2e68d.js.map",
+    "453.ababb8c1.chunk.js.map": "/YousufAbdelhady/static/js/453.ababb8c1.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ce8971a0.css",
+    "static/js/main.ecb2e68d.js"
+  ]
+}
