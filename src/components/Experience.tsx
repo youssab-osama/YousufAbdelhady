@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Trophy, Medal } from 'lucide-react';
-import CodeRain from './CodeRain';
 
 const experiences = [
   {
@@ -36,8 +35,7 @@ const experiences = [
 
 const Experience = () => {
   return (
-    <section id="experience" className="py-24 px-6 w-full max-w-5xl mx-auto relative cursor-default overflow-hidden">
-      <CodeRain />
+    <section id="experience" className="py-24 px-6 w-full max-w-5xl mx-auto relative cursor-default">
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20 relative z-10">
         <h2 className="font-display font-bold text-5xl md:text-6xl text-on-surface mb-4 glow-hover transition-all">EXPERIENCE<span className="text-primary">.</span></h2>
         <p className="font-mono text-sm text-primary uppercase tracking-widest bg-primary/10 px-4 py-1.5 rounded w-fit mx-auto border border-primary/20">The Crucible of Competitive Programming</p>

@@ -18,7 +18,8 @@ const CodeRain = () => {
     let drops: number[] = [];
 
     for (let x = 0; x < columns; x++) {
-      drops[x] = Math.random() * height; // Start at random height to randomize spawn
+      // Start lines heavily randomized (0s - 2s delay at 38ms tick rate = up to ~52 negative frames)
+      drops[x] = -Math.floor(Math.random() * 55); 
     }
 
     const draw = () => {
@@ -30,8 +31,11 @@ const CodeRain = () => {
       ctx.font = fontSize + 'px monospace';
 
       for (let i = 0; i < drops.length; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        // Since we are starting into negative numbers to simulate a delay, only draw when drop > 0
+        if (drops[i] * fontSize >= 0) {
+          const text = characters.charAt(Math.floor(Math.random() * characters.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        }
 
         if (drops[i] * fontSize > height && Math.random() > 0.975) {
           drops[i] = 0;
@@ -40,7 +44,8 @@ const CodeRain = () => {
       }
     };
 
-    const interval = setInterval(draw, 50);
+    // Was 50. Made it 25% faster -> roughly 38ms.
+    const interval = setInterval(draw, 38);
 
     const resize = () => {
       width = canvas.width = canvas.offsetWidth;

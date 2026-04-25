@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { BugOff, Zap, GraduationCap, Braces } from 'lucide-react';
-import CodeRain from './CodeRain';
 
 const services = [
   {
@@ -36,8 +35,7 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="py-24 px-6 max-w-7xl mx-auto w-full relative overflow-hidden">
-      <CodeRain />
+    <section id="services" className="py-24 px-6 max-w-7xl mx-auto w-full relative">
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full pointer-events-none z-0" />
       
       <motion.div 
